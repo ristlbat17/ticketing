@@ -1,0 +1,132 @@
+<template name="bundleDetail">
+    <div class="bundle-detail col-xs-10 col-xs-offset-1">
+        {{>backButton}}
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Bündel {{bundle.name}}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Standort A:</div>
+                <div class="col-xs-6 info-text">{{bundle.locationA}}</div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Standort B:</div>
+                <div class="col-xs-6 info-text">{{bundle.locationB}}</div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Max. Kanaldämpfung:</div>
+                <div class="col-xs-6 info-text">{{bundle.minValue}} dB</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <canvas id="level-graph"></canvas>
+            </div>
+        </div>
+        <div class="row level-table">
+            <div class="col-xs-12 col-sm-6">
+                <h4>Kanaldämpfung {{getDirectionName 'AtoB'}}</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Wert</th>
+                            <th>Meldedatum</th>
+                            <th><th>Abweichung der Meldungen</th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each getDampingList bundle}}
+                        <tr>
+                            <td>{{AtoBDamping}} dB</td>
+                            <td>{{getAverageDate dateA dateB}}</td>
+                            <td>{{getDeltaHours dateA dateB}} h</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <h4>Kanaldämpfung {{getDirectionName 'BtoA'}}</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Wert</th>
+                            <th>Meldedatum</th>
+                            <th>Abweichung der Meldungen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each getDampingList bundle}}
+                        <tr>
+                            <td>{{BtoADamping}} dB</td>
+                            <td>{{getAverageDate dateA dateB}}</td>
+                            <td>{{getDeltaHours dateA dateB}} h</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                    <h4>TX/RX Werte {{bundle.locationA}}</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Wert</th>
+                                <th>Meldedatum</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           {{#each getMeasurementsForLocation bundle bundle.locationA}}
+                            <tr>
+                                <td>TX: {{txValue}} dBm / RX: {{rxValue}} dBm</td>
+                                <td>{{formatDate date}}</td>
+                                <td><i class="glyphicon glyphicon-remove delete" data-measurement-id="{{id}}" data-toggle="modal" data-target="#confirm-delete"></i></td>
+        
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                    <h4>TX/RX Werte {{bundle.locationB}}</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Wert</th>
+                                <th>Meldedatum</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           {{#each getMeasurementsForLocation bundle bundle.locationB}}
+                            <tr>
+                                <td>TX: {{txValue}} dBm / RX: {{rxValue}} dBm</td>
+                                <td>{{formatDate date}}</td>
+                                <td><i class="glyphicon glyphicon-remove delete" data-measurement-id="{{id}}" data-toggle="modal" data-target="#confirm-delete"></i></td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-titl">Wert löschen?</h4>
+                </div>
+                <div class="modal-body">
+                    Möchten Sie den RX/TX Wert wirklich löschen?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                    <a class="btn btn-danger btn-ok" data-dismiss="modal">Löschen</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

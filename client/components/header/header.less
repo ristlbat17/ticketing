@@ -1,0 +1,80 @@
+@import "../../imports.import.less";
+
+.site-header {
+  background-color: @black;
+  color: @white;
+  height: @header-height;
+  line-height: @header-height;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  .username {
+    .e-link {
+      .hoverColor(@blue, @blue-light);
+    }
+  }
+
+  .label-as-badge {
+    border-radius: 1em;
+  }
+
+  #time {
+    color: @gray;
+  }
+
+  img {
+    height: 60px;
+    line-height: normal;
+    margin-top: 10px;
+  }
+
+  nav:not(.mobile) {
+    li {
+      display: inline-block;
+      margin-left: 20px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &.active {
+        .e-link {
+          color: @white;
+        }
+      }
+    }
+  }
+
+  nav.mobile {
+    .glyphicon-menu-hamburger {
+      margin-top: 28px;
+    }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-color: @black;
+
+      &.open {
+        display: block;
+      }
+
+      .close-nav {
+        top: 0;
+        right: 20px;
+        position: absolute;
+      }
+
+      li {
+        margin-left: 20px;
+      }
+    }
+  }
+}

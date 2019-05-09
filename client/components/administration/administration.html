@@ -1,0 +1,626 @@
+<template name="administration">
+    <div class="administration col-xs-10 col-xs-offset-1">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Administration</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Benutzer / Triagen</h2>
+                <button class="btn btn-xs btn-default add-btn" id="newUser" data-toggle="modal" data-target="#adminUserEdit">Neuer Benutzer
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-striped table-hover" id="usertable">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each users}} {{>adminUserRow}} {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Einsatz / Übung</h2>
+                <button class="btn btn-xs btn-default add-btn" id="newDrill" data-toggle="modal" data-target="#adminDrillEdit">Neue Übung
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-striped table-hover" id="drilltable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Standard auswahl</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each drills}} {{>adminDrillRow}} {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Standorte</h2>
+                <button class="btn btn-xs btn-default add-btn" id="newLocation" data-toggle="modal" data-target="#adminLocationEdit">Neuer Standort
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-striped table-hover" id="locationtable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Übung</th>
+                            <th>StaoC</th>
+                            <th>Telefon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each locations}} {{>adminLocationRow}} {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <form id="locationDeadlineForm" class="form-inline">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2>Standort Deadlines für Übung</h2>
+                        <select id="drillFilterLocation" class="form-control add-btn" required>
+                            <option> auwählen ... </option>
+                            {{#each drills}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>               
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-striped table-hover" id="locationtable">
+                            <thead>
+                                <tr>
+                                    <th>Standort</th>
+                                    <th>Bezugsnummer</th>
+                                    <th>Aktiv</th>
+                                    <th>Standort erreichen</th>
+                                    <th>SE 240 Verbindungskontrolle erreichen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each locationsPerDrill}} {{>locationEstabilishmentRow}} {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary space-top" id="saveBundleDeadlines">Speichern</button>
+                    </div>
+                </div>
+            </form>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Bündel</h2>
+                <button class="btn btn-xs btn-default add-btn" id="newBundle" data-toggle="modal" data-target="#adminBundleEdit">Neues Bündel
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-striped table-hover" id="locationtable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Übung</th>
+                            <th>Standort A</th>
+                            <th>Standort B</th>
+                            <th>Max Kanaldämpfung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each bundles}} {{>adminBundleRow}} {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <form id="bundleDeadlineForm" class="form-inline">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>Bündel Deadlines für Übung</h2>
+                    <select id="drillFilter" class="form-control add-btn" required>
+                        <option> auwählen ... </option>
+                        {{#each drills}}
+                            <option value="{{_id}}">{{name}}</option>
+                        {{/each}}
+                    </select>               
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-striped table-hover" id="locationtable">
+                        <thead>
+                            <tr>
+                                <th>Bündel</th>
+                                <th>Bezugsnummer</th>
+                                <th>Aktiv</th>
+                                <th>SHF erreichen</th>
+                                <th>TBZ erreichen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each bundlesPerDrill}} {{>adminBundleCheckPointRow}} {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <button class="btn btn-primary space-top" id="saveBundleDeadlines">Speichern</button>
+                </div>
+            </div>
+        </form>
+   
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Sonstige Konfiguration</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Prioritäten (Deadlines)</h3>
+            </div>
+        </div>
+        <form id="ticketConfigForm" class="form-inline">
+            <div class="row">
+                <div class="col-xs-6 col-md-4">
+                    <div class="form-group">
+                        <label for="highPrioMinutes">Hoch</label>
+
+                        <div class="input-group col-xs-9">
+                            <div class="input-group-addon">T +</div>
+                            <input type="number" class="form-control" required="required" id="highPrioMinutes" value="{{config.priorities.high}}" />
+
+                            <div class="input-group-addon">min</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    <div class="form-group">
+                        <label for="middlePrioMinutes">Mittel</label>
+
+                        <div class="input-group col-xs-9">
+                            <div class="input-group-addon">T +</div>
+                            <input type="number" class="form-control" required="required" id="middlePrioMinutes" value="{{config.priorities.normal}}"
+                            />
+
+                            <div class="input-group-addon">min</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-4 space-top">
+                    <div class="form-group">
+                        <label for="lowPrioMinutes">Tief</label>
+
+                        <div class="input-group col-xs-9">
+                            <div class="input-group-addon">T +</div>
+                            <input type="number" class="form-control" required="required" id="lowPrioMinutes" value="{{config.priorities.low}}" />
+
+                            <div class="input-group-addon">min</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-4 space-top">
+                        <div class="form-group">
+                            <label for="bundleCheckMinutes">Warnungsanzeige für Bündel Deadlines</label>
+    
+                            <div class="input-group col-xs-9">
+                                <div class="input-group-addon">T -</div>
+                                <input type="number" class="form-control" required="required" id="bundleWarningMinutes" value="{{config.priorities.bundleWarningMinutes}}" />
+    
+                                <div class="input-group-addon">min</div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <input type="submit" value="Speichern" class="btn btn-primary space-top" />
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Alles zurücksetzen</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteEverything">Zurücksetzen (DB-Wipe)
+                    </button>
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteEverything" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">
+                        Daten löschen
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <p>Möchten Sie wirklich alle Daten (Triagen, Standorte, etc.) löschen? Das neue Administratorenpasswort
+                        wird "123456" sein.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Nein</button>
+                    <button type="submit" class="btn btn-danger" id="deleteEverythingBtn" data-dismiss="modal">Ja,
+                        löschen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{>adminUserEdit}} {{>adminDrillEdit}} {{>adminLocationEdit}} {{>adminBundleEdit}}
+</template>
+
+<template name="adminUserRow">
+    <tr data-toggle="modal" data-target="#adminUserEdit">
+        <td>{{username}}</td>
+        <td>{{profile.name}}</td>
+    </tr>
+</template>
+
+<template name="adminUserEdit">
+    <div class="modal fade" id="adminUserEdit" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">
+                        {{#if editItem._id}} {{editItem.username}} bearbeiten {{else}} Benutzer erstellen {{/if}}
+                    </h4>
+                </div>
+                <form id="userEditForm">
+                    <div class="modal-body">
+                        {{>notificationArea modal=true}} {{#unless editItem._id}}
+                        <div class="form-group js-username">
+                            <label for="username" class="control-label">Benutzername</label>
+                            <input type="text" class="form-control" id="username">
+                        </div>
+                        {{/unless}}
+                        <div class="form-group js-name">
+                            <label for="name" class="control-label">Name</label>
+                            <input type="text" class="form-control" id="name" value="{{editItem.profile.name}}">
+                        </div>
+                        <div class="form-group js-password">
+                            <label for="password" class="control-label">Neues Passwort</label>
+                            <input type="password" class="form-control" id="password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                        <input type="submit" class="btn btn-primary" value="Speichern" /> {{#if editItem._id}}
+                        <button type="button" class="btn btn-danger pull-left js-delete">Löschen</button> {{/if}}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="adminDrillRow">
+    <tr data-toggle="modal" data-target="#adminDrillEdit" class="{{#if active}}success{{/if}}">
+        <td>{{name}}</td>
+        <td>
+            {{#if active}}
+            <i class="glyphicon glyphicon-ok"></i> {{else}}
+            <button class="btn btn-default btn-xs">Als standard setzen</button> {{/if}}
+        </td>
+    </tr>
+</template>
+
+<template name="adminDrillEdit">
+    <div class="modal fade" id="adminDrillEdit" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">
+                        {{#if editItem._id}} {{editItem.name}} bearbeiten {{else}} Übung erstellen {{/if}}
+                    </h4>
+                </div>
+                <form id="drillEditForm">
+                    <div class="modal-body">
+                        {{>notificationArea modal=true}}
+                        <div class="form-group js-name">
+                            <label for="name" class="control-label">Name</label>
+                            <input type="text" class="form-control" id="name" value="{{editItem.name}}">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                        <input type="submit" class="btn btn-primary" value="Speichern" /> {{#if editItem._id}}
+                        <button type="button" class="btn btn-danger pull-left js-delete">Löschen</button> {{/if}}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<template name="adminLocationRow">
+    <tr data-toggle="modal" data-target="#adminLocationEdit">
+        <td>{{name}}</td>
+        <td>{{getDrill drill}}</td>
+        <td>{{responsiblePerson}} </td>
+        <td>{{contactNumberResonsiblePerson}}</td>
+    </tr>
+</template>
+
+<template name="adminLocationEdit">
+    <div class="modal fade" id="adminLocationEdit" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">
+                        {{#if editItem._id}} {{editItem.name}} bearbeiten {{else}} Standort erstellen {{/if}}
+                    </h4>
+                </div>
+                <form id="locationEditForm">
+                    <div class="modal-body">
+                        {{>notificationArea modal=true}}
+                        <div class="form-group js-name">
+                            <label for="name" class="control-label">Name</label>
+                            <input type="text" class="form-control" id="name" value="{{editItem.name}}">
+                        </div>
+                        <div class="form-group js-drill">
+                            <label for="drill" class="control-label">Übung</label>
+                            <select id="drill" class="form-control" required>
+                                    {{#each drills}}
+                                        <option value="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                        </div>
+                        <div class="form-group js-chief">
+                            <label for="chief" class="control-label">Standort Chef</label>
+                            <input type="text" class="form-control" id="chief" value="{{editItem.responsiblePerson}}">
+                        </div>
+                        <div class="form-group js-phone">
+                            <label for="phone" class="control-label">Telefon StaoC</label>
+                            <input type="text" class="form-control" id="phone" value="{{editItem.contactNumberResonsiblePerson}}">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                        <input type="submit" class="btn btn-primary" value="Speichern" /> {{#if editItem._id}}
+                        <button type="button" class="btn btn-danger pull-left js-delete">Löschen</button> {{/if}}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="adminBundleRow">
+    <tr data-toggle="modal" data-target="#adminBundleEdit">
+        <td>{{name}}</td>
+        <td>{{getDrill drill}}</td>
+        <td>{{locationA}}</td>
+        <td>{{locationB}}</td>
+        <td>{{minValue}} dB</td>
+    </tr>
+</template>
+
+<template name="adminBundleCheckPointRow">
+    {{#if hasNoEstablishments establishments}}
+        <tr class="establishmentContext"> 
+            <input type="hidden" class="bundleId" value="{{_id}}">
+            <td rowspan="{{establishments.Count}}">
+                {{name}}
+                <button type="button" class="btn btn-success pull-right js-add-establishment" title="Neuen Bezug hinzufügen">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    {{else}}
+        {{#each establishment in establishments}}
+        <tr class="establishmentContext"> 
+            <input type="hidden" class="bundleId" value="{{_id}}">
+            {{#if isFirst establishment.establishmentNumber}}
+                <td rowspan="{{establishments.length}}">
+                    {{name}}
+                    <button type="button" class="btn btn-success pull-right js-add-establishment" title="Neuen Bezug hinzufügen">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </button>
+                </td>
+            
+            {{/if}}
+
+            <td>
+                <div class="row text-center">
+                    {{establishment.establishmentNumber}}
+                    <i class="glyphicon glyphicon-remove js-delete-establishment establishmentNumber" data-number="{{establishment.establishmentNumber}}" 
+                    title="Bezug löschen" style="margin-left: 5px"></i>
+                </div>
+            </td>
+            <td>
+                <div class="row text-center">
+                {{#if establishment.active}}
+                    <i class="glyphicon glyphicon-ok"></i> 
+                {{else}}
+                    <button class="btn btn-default btn-xs js-set-bundle-establishment" data-id="{{establishment.establishmentNumber}}">Aktiv setzen</button> 
+                {{/if}}
+                </div>
+            </td>
+            <td>
+                <div class="row">
+                    <div class="container-fluid">
+                        <div class="input-group datetimepicker col-md-11">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <input class="set-due-date form-control shf" type="text" value="{{dateTime establishment.shf.deadline}}" />
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="row">
+                    <div class="container-fluid">
+                        <div class="input-group datetimepicker col-md-11">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <input class="set-due-date form-control tbz" type="text" value="{{dateTime establishment.tbz.deadline}}" />
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+    {{/if}}
+</template>
+
+<template name="locationEstabilishmentRow">
+    {{#if hasNoEstablishments establishments}}
+        <tr class="locationEstablishmentContext"> 
+            <input type="hidden" class="locationId" value="{{_id}}">
+            <td>
+                {{name}}
+                <button type="button" class="btn btn-success pull-right js-add-location-establishment" title="Neuen Bezug hinzufügen">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    {{else}}
+        {{#each establishment in establishments}}
+        <tr class="locationEstablishmentContext"> 
+            <input type="hidden" class="bundleId" value="{{_id}}">
+            {{#if isFirst establishment.establishmentNumber}}
+                <td rowspan="{{establishments.length}}">
+                    {{name}}
+                    <button type="button" class="btn btn-success pull-right js-add-location-establishment" title="Neuen Bezug hinzufügen">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </button>
+                </td>
+            {{/if}}
+            <td>
+                <div class="row text-center">
+                    {{establishment.establishmentNumber}}
+                    <i class="glyphicon glyphicon-remove js-delete-location-establishment establishmentNumber" data-number="{{establishment.establishmentNumber}}" 
+                    title="Bezug löschen" style="margin-left: 5px"></i>
+                </div>
+            </td>
+            <td>
+                <div class="row text-center">
+                {{#if establishment.active}}
+                    <i class="glyphicon glyphicon-ok"></i> 
+                {{else}}
+                    <button class="btn btn-default btn-xs js-set-location-establishment" data-id="{{establishment.establishmentNumber}}">Aktiv setzen</button> 
+                {{/if}}
+                </div>
+            </td>
+            <td>
+                <div class="row">
+                    <div class="container-fluid">
+                        <div class="input-group datetimepicker col-md-11">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <input class="set-due-date form-control location" type="text" value="{{dateTime establishment.location.deadline}}" />
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="row">
+                    <div class="container-fluid">
+                        <div class="input-group datetimepicker col-md-11">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <input class="set-due-date form-control radio" type="text" value="{{dateTime establishment.radio.deadline}}" />
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+    {{/if}}
+</template>
+
+<template name="adminBundleEdit">
+    <div class="modal fade" id="adminBundleEdit" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">
+                        {{#if editItem._id}} {{editItem.name}} bearbeiten {{else}} Bündel erstellen {{/if}}
+                    </h4>
+                </div>
+                <form id="bundleEditForm">
+                    <div class="modal-body">
+                        {{>notificationArea modal=true}}
+                        <div class="form-group js-name">
+                            <label for="name" class="control-label">Name</label>
+                            <input type="text" class="form-control" id="name" value="{{editItem.name}}">
+                        </div>
+                        <div class="form-group js-min-value">
+                            <label for="minValue" class="control-label">ALIGNING Wert nach Ristl Bf</label>
+                            <input type="number" max="0" min="-99" step="any" class="form-control" id="minValue" value="{{removeDamping editItem.minValue}}">
+                        </div>
+                        <div class="form-group js-drill">
+                            <label for="bundle-drill" class="control-label">Übung</label>
+                            <select id="bundle-drill" class="form-control" required>
+                                    {{#each drills}}
+                                        <option value="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                        </div>
+                        <div class="form-group js-location-a">
+                            <label for="placeA" class="control-label">Standort A</label>
+                            <select id="placeA" class="form-control" required>
+                                    {{#each locations}}
+                                        <option>{{name}}</option>
+                                    {{/each}}
+                                </select>
+                        </div>
+                        <div class="form-group js-location-b">
+                            <label for="placeB" class="control-label">Standort B</label>
+                            <select id="placeB" class="form-control" required>
+                                    {{#each locations}}
+                                        <option>{{name}}</option>
+                                    {{/each}}
+                                </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                        <input type="submit" class="btn btn-primary" value="Speichern" /> {{#if editItem._id}}
+                        <button type="button" class="btn btn-danger pull-left js-delete">Löschen</button> {{/if}}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</template>

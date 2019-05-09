@@ -1,0 +1,109 @@
+<template name="operationanalysis">
+    <div class="col-xs-10 col-xs-offset-1">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-md-8 no-padding">
+                <h1>Übungsauswertung</h1>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <select id="drillFilter" class="form-control header-element" required title="Einsatz">
+                    {{#each drills}}
+                    <option value="{{_id}}">Einsatz: {{name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12  col-sm-6 no-padding">
+                <h3>Standortliste</h3>
+            </div>
+            <div class="col-xs-12  col-sm-6 no-padding">
+                <a href="#" id="downloadLocationAnalysis" class="download-btn btn btn-default pull-right">
+                    <span class="glyphicon glyphicon-cloud-download" style="padding-right:5px"></span>Standortauswertung herunterladen</a>
+            </div>
+            <table id="locationlist" class="dataTable table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Standort</th>
+                        <th><span  data-toggle="tooltip" data-placement="top" title="Bezugsnummer">#</span></th>
+                        <th>Standort Soll</th>
+                        <th>Standort Ist</th>
+                        <th><span data-toggle="tooltip" data-placement="top" title="Soll - Ist, d.h. ein negativer wert ist NEF, positiv = erfüllt">Standort Differenz</span></th>
+                        <th>Standort Kommentar</th>
+                        <th><span data-toggle="tooltip" data-placement="top" title="Verbindungskontrolle">Verb. Soll</span></th>
+                        <th><span data-toggle="tooltip" data-placement="top" title="Verbindungskontrolle">Verb. Ist</span></th>
+                        <th><span data-toggle="tooltip" data-placement="top" title="Soll - Ist, d.h. ein negativer wert ist NEF, positiv = erfüllt">Verb. Differenz</span></th>
+                        <th><span data-toggle="tooltip" data-placement="top" title="Verbindungskontrolle">Verb. Kommentar</span></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each locations}} {{#each establishments}}
+                    <tr>
+                        <td>{{../name}}</td>
+                        <td>{{establishmentNumber}}</td>
+                        <td>{{formatToString location.deadline}}</td>
+                        <td>{{formatToString location.timestamp}}</td>
+                        <td>{{getDifference location.timestamp location.deadline}}</td>
+                        <td>{{location.comment}}</td>
+
+                        <td>{{formatToString radio.deadline}}</td>
+                        <td>{{formatToString radio.timestamp}}</td>
+                        <td>{{getDifference radio.timestamp radio.deadline}}</td>
+                        <td>{{location.comment}}</td>
+                    </tr>
+                    {{/each}} {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <hr/>
+        </div>
+        <div class="row">
+            <div class="col-xs-12  col-sm-6 no-padding">
+                <h3>Bündelliste</h3>
+            </div>
+            <div class="col-xs-12  col-sm-6 no-padding">
+                <a href="#" id="downloadBundleAnalysis" class="download-btn btn btn-default pull-right">
+                    <span class="glyphicon glyphicon-cloud-download" style="padding-right:5px"></span>Bündleauswertung herunterladen</a>
+            </div>
+            <table id="bundlelist" class="dataTable table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Bündel</th>                  
+                        <th>Station A</th>
+                        <th>Station B</th>
+                        <th><span data-toggle="tooltip" data-placement="top" title="Bezugsnummer">#</span></th>
+                        <th>SHF Soll</th>
+                        <th>SHF Ist</th>
+                        <th><span data-toggle="tooltip" data-placement="top" title="Soll - Ist, d.h. ein negativer wert ist NEF, positiv = erfüllt">SHF Differenz</span></th>
+                        <th>SHF Kommentar</th>
+                        <th>TBZ Soll</th>
+                        <th>TBZ Ist</th>
+                        <th><span data-toggle="tooltip" data-placement="top" title="Soll - Ist, d.h. ein negativer wert ist NEF, positiv = erfüllt">TBZ Differenz</span></th>
+                        <th>TBZ Kommentar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each bundles}} {{#each establishments}}
+                    <tr>
+                        <td>{{../name}}</td>
+                        <td>{{../placeA}}</td>
+                        <td>{{../placeB}}</td>
+                        <td>{{establishmentNumber}}</td>
+
+                        <td>{{formatToString shf.deadline}}</td>
+                        <td>{{formatToString shf.timestamp}}</td>
+                        <td>{{getDifference shf.timestamp shf.deadline}}</td>
+                        <td>{{shf.comment}}</td>
+
+                        <td>{{formatToString tbz.deadline}}</td>
+                        <td>{{formatToString tbz.timestamp}}</td>
+                        <td>{{getDifference tbz.timestamp tbz.deadline}}</td>
+                        <td>{{tbz.comment}}</td>
+                    </tr>
+                    {{/each}} {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>

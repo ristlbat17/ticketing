@@ -1,0 +1,19 @@
+<template name="notificationArea">
+    <div class="notification-area {{#if modal}}modal-child{{/if}}">
+        {{#each notifications}}
+            {{>notification}}
+        {{/each}}
+    </div>
+</template>
+
+<template name="notification">
+    <div class="notification alert-{{type}}" data-id="{{_id}}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    {{message}}
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

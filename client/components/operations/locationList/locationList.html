@@ -1,0 +1,133 @@
+<template name="locationList">
+    <div class="row location-list">
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th data-sort="name"><span>Standort</span></th>
+                        <th data-sort="status" ><span>Status</span></th>
+                        <th data-sort="deltaLocation">Standort (+/-)</th>
+                        <th data-sort="deltaRadio">Verbindungskontrolle (+/-)</th>
+                        <th>Stao Chef</th>
+                        <th>Telefon</th>
+                    </tr>
+                </thead>
+                {{#each locations}} {{>locationRow}} {{/each}}
+            </table>
+        </div>
+    </div>
+</template>
+    
+<template name="locationRow">
+    <tbody>
+        <tr class="location">
+            <td>{{name}}</td>
+            {{#with getActiveEstablishment this}}
+                <td><i class="glyphicon glyphicon-pencil btn-link" 
+                    data-id="{{../_id}}" 
+                    data-toggle="modal" 
+                    data-target="#editLocationStatus"></i>
+                    {{getLocationStatus this}}
+                </td>
+                <td>{{getDeltabox location.timestamp location.deadline location.comment "glyphicon glyphicon-home" ""}}</td>
+                <td>{{getDeltabox radio.timestamp radio.deadline radio.comment "glyphicon glyphicon-signal" ""}}</td>
+            {{else}}
+                <td rowspan="2"><i class="glyphicon glyphicon-time"></i> Deadline konfigurieren.</td>
+                <td rowspan="2">-</td>
+                <td rowspan="2">-</td>
+            {{/with}}
+            <td>{{responsiblePerson}} </td>
+            <td>{{contactNumberResonsiblePerson}}</td>
+        </tr>        
+    </tbody>
+</template>
+    
+<template name="editLocationStatus">
+    <div class="modal fade" id="editLocationStatus" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" ar role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">
+                        Standortstatus editieren
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    
+                    <form id="editLocationEstablishment" class="form">
+                        {{>notificationArea modal=true}}
+                        <div class="row">
+                            <div class="form-group col-md-6 col-xs-6">
+                                <label for="timestampLocation">Standort erreicht um</label>
+                                <input hidden id="establishmentNumber" value="{{establishment.establishmentNumber}}">
+                                <div class="input-group datetimepicker">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="timestampLocation" class="set-due-date form-control" 
+                                    type="text" value="{{dateTime establishment.location.timestamp}}" placeholder="Datum auswählen"/>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-xs-6 span6">
+                                <label for="deadlineLocation">Deadline</label>
+                                <div class="input-group datetimepicker">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="deadlineLocation" class="set-due-date form-control" 
+                                    type="text" disabled value="{{dateTime establishment.location.deadline}}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label for="commentLocation">Kommentar</label>
+                                <textarea id="commentLocation" class="form-control" value="{{establishment.location.comment}}" rows="3" placeholder="Kommentar zu Standort"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <hr/>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-xs-6">
+                                <label for="timestampRadio">Verbindungskontrolle SE 240 erreicht um</label>
+                                <div class="input-group datetimepicker">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input  id="timestampRadio" class="set-due-date form-control" type="text" 
+                                    value="{{dateTime establishment.radio.timestamp}}" placeholder="Datum auswählen"/>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-xs-6 span6">
+                                <label for="timestamp">Deadline</label>
+                                <div class="input-group datetimepicker">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="deadlineRadio" class="set-due-date form-control" 
+                                    value="{{dateTime establishment.radio.deadline}}" type="text" disabled/>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12 col-xs-12">
+                                    <label for="commentRadio">Kommentar</label>
+                                    <textarea id="commentRadio" class="form-control" rows="3"
+                                    value="{{establishment.radio.comment}}" placeholder="Kommentar zu Verbindugnskontrolle"></textarea>
+                                </div>
+                              
+                            </div>
+                            <div class="row">
+                                <div class="checkbox col-md-6 col-xs-6 margin-row {{isClosed establishment.closed}}" >
+                                    <label for="closed">Standort verlassen
+                                        <input id="closed" type="checkbox" checked="{{establishment.closed}}">
+                                    </label>
+                                </div>
+                            </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                            <input type="submit" class="btn btn-primary" value="Speichern" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</template> 
+        
+    

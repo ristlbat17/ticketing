@@ -1,0 +1,247 @@
+<template name="bundleList">
+    <div class="row bundle-list">
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th data-sort="name"><span class="{{getSortClass 'name'}}">Bündel</span></th>
+                        <th data-sort="status"><span class="{{getSortClass 'status'}}">Status</span></th>
+                        <th data-sort="deltaShf"><span class="{{getSortClass 'deltaShf'}}">SHF (+/-)</span></th>
+                        <th data-sort="deltaTbz"><span class="{{getSortClass 'deltaTbz'}}">TBZ (+/-)</span></th>
+                        <th>Max Kanaldämpfung</th>
+                        <th>Kanaldämpfung hin/zurück</th>
+                    </tr>
+                </thead>
+                {{#each bundles}} {{>bundleRow this}} {{/each}}
+            </table>
+        </div>
+    </div>
+</template>
+
+<template name="bundleRow">
+    <tbody>
+        {{#with getLatestDamping this 'AtoB'}}
+        <tr>
+            <td rowspan="2"><a href="#" class="e-link">{{../name}}</a></td>
+            {{#with getActiveEstablishment ..}}
+                <td rowspan="2">
+                    <td><i class="glyphicon glyphicon-pencil btn-link" data-id="{{../../_id}}" data-toggle="modal" data-target="#editBundleStatus"></i>                    {{getBundleStatus this}}</td>
+                </td>
+                <td rowspan="2">
+                    {{getDeltabox shf.timestamp shf.deadline shf.comment "" "SHF"}}
+                </td>
+                <td rowspan="2">
+                    {{getDeltabox tbz.timestamp tbz.deadline tbz.comment "" "TBZ"}}
+                </td>
+            {{else}}
+                <td rowspan="2"><i class="glyphicon glyphicon-time"></i> Deadlines konfigurieren.</td>
+                <td rowspan="2">-</td>
+                <td rowspan="2">-</td>
+            {{/with}}
+            <td rowspan="2">{{../minValue}} dB</td>
+            <td class="{{isLate .. direction}}">{{getDirection .. 'AtoB'}} [{{.}} dB]</td>
+        </tr>
+        {{else}}
+        <tr>
+            <td rowspan="2">{{../name}}</td>
+            {{#with getActiveEstablishment ..}}
+                <td rowspan="2">
+                    <td><i class="glyphicon glyphicon-pencil btn-link" data-id="{{../../_id}}" data-toggle="modal" data-target="#editBundleStatus"></i>{{getBundleStatus this}}</td>
+                </td>
+                <td rowspan="2">
+                    {{getDeltabox shf.timestamp shf.deadline shf.comment "" "SHF"}}
+                </td>
+                <td rowspan="2">
+                    {{getDeltabox tbz.timestamp tbz.deadline tbz.comment "" "TBZ"}}
+                </td>
+            {{else}}
+                <td rowspan="2"><i class="glyphicon glyphicon-time"></i> Deadlines konfigurieren.</td>
+                <td rowspan="2">-</td>
+                <td rowspan="2">-</td>
+            {{/with}}
+            <td rowspan="2">{{../minValue}}</td>
+            <td class="danger">{{getDirection .. direction}} [k.A.]</td>
+        </tr>
+        {{/with}} {{#with getLatestDamping this 'BtoA'}}
+        <tr>
+            <td class="{{isLate .. direction}}">{{getDirection .. 'BtoA'}} [{{.}} dB]</td>
+        </tr>
+        {{else}}
+        <tr>
+            <td class="danger"></td>
+        </tr>
+        {{/with}}
+    </tbody>
+</template>
+
+<template name="editBundleStatus">
+    <div class="modal fade" id="editBundleStatus" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" ar role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">
+                        Bündelstatus editieren
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form id="editBundleEstablishmentForm" class="form">
+                        <div class="row">
+                            <div class="form-group col-md-6 col-xs-6">
+                                <label for="timestampShf">SHF erreicht um</label>
+                                <input hidden id="bundleEstablishmentNumber" value="{{establishment.establishmentNumber}}">
+                                <div class="input-group datetimepicker">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="timestampShf" class="set-due-date form-control" type="text" value="{{dateTime establishment.shf.timestamp}}" placeholder="Datum auswählen"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-xs-6 span6">
+                                <label for="deadlineShf">Deadline</label>
+                                <div class="input-group datetimepicker">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="deadlineShf" class="set-due-date form-control" type="text" disabled value="{{dateTime establishment.shf.deadline}}"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label for="commentShf">Kommentar</label>
+                                <textarea id="commentShf" class="form-control" rows="3" value="{{establishment.shf.comment}}" placeholder="Kommentar zu SHF"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <hr/>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-xs-6">
+                                <label for="timestampTbz">TBZ erreicht um</label>
+                                <div class="input-group datetimepicker">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="timestampTbz" class="set-due-date form-control" type="text" value="{{dateTime establishment.tbz.timestamp}}" placeholder="Datum auswählen"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-xs-6 span6">
+                                <label for="timestamp">Deadline</label>
+                                <div class="input-group datetimepicker">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="deadlineTbz" class="set-due-date form-control" value="{{dateTime establishment.tbz.deadline}}" type="text" disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label for="commentTbz">Kommentar</label>
+                                <textarea id="commentTbz" class="form-control" rows="3" value="{{establishment.tbz.comment}}" placeholder="Kommentar zu TBZ"></textarea>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="checkbox col-md-6 col-xs-6 margin-row {{isClosed establishment.closed}}">
+                                <label for="bundleClosed">Bündel getrennt
+                                        <input id="bundleClosed" type="checkbox" checked="{{establishment.closed}}">
+                                    </label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                            <input type="submit" class="btn btn-primary" value="Speichern" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="newBundleLevel">
+    <div class="modal fade" id="newLevel" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">
+                        Pegelwerte erfassen
+                    </h4>
+                </div>
+                <form id="newLevelForm" class="form-horizontal" novalidate>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="bundle" class="control-label col-xs-4">Bündel</label>
+
+                            <div class="col-xs-8">
+                                <select id="bundle" class="form-control" required>
+                                    {{#each bundles}}
+                                        <option value="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        {{#if selectedBundle}}
+                        <div class="form-group">
+                            <label class="control-label col-xs-4">Standort</label>
+                            <div class="col-xs-8">
+
+                                <div class="radio">
+                                    <label>
+                                        <input id="locationA" type="radio" name="location" value="A">
+                                        {{selectedBundle.locationA}}
+                                        
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input id="locationB" type="radio" name="location" value="B">
+                                        {{selectedBundle.locationB}}
+                                    </label>
+                                </div>
+                         
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="bundleDate" class="control-label col-xs-4">Meldungszeitpunkt</label>
+                            <div class="col-xs-8">
+                                <div class="input-group datetimepicker">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                        <input id="bundleDate" class="set-due-date form-control" type="text" value="{{dateTime selectedDate}}" placeholder="Optional wenn leer wird akutelle Zeitpunkt genommen!" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txValue" class="control-label col-xs-4">TX-Wert</label>
+
+                            <div class="col-xs-8">
+                                <div class="input-group">
+                                    
+                                    <input type="number" min="-99" max="22" step="any"  class="form-control" id="txValue" required />
+                                    <span class="input-group-addon">dBm</span>  
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rxValue" class="control-label col-xs-4">RX-Wert</label>
+
+                            <div class="col-xs-8">
+                                <div class="input-group">
+                                  
+                                    <input type="number" step="any" min="-99" max="22" class="form-control" id="rxValue" required>
+                                    <span class="input-group-addon">dBm</span>
+                                </div>
+                            </div>
+                        </div>
+                        {{/if}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                        <input type="submit" class="btn btn-primary" value="Speichern" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</template>

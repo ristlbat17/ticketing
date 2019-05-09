@@ -1,0 +1,30 @@
+<template name="login">
+    <div class="login">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                <h1>Bitte anmelden</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                <form id="loginForm">
+                    <div class="form-group js-user">
+                        <label for="username" class="control-label">Benutzername</label>
+                        <input type="text" class="form-control" id="username">
+                    </div>
+                    <div class="form-group js-pass">
+                        <label for="password" class="control-label">Passwort</label>
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        {{#unless loggingin}}
+                            Anmelden
+                        {{else}}
+                            {{>loader}}
+                        {{/unless}}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</template>

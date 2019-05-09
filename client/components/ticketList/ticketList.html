@@ -1,0 +1,42 @@
+<template name="ticketList">
+    <div class="row ticket-list">
+        <div class="hidden-xs hidden-sm">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th data-sort="created"><span class="{{getSortClass 'created'}}">Eröffnet</span></th>
+                        <th data-sort="triageName"><span class="{{getSortClass 'triageName'}}">Triage</span></th>
+                        <th>Kurzbeschrieb</th>
+                        <th>Status</th>
+                        <th data-sort="location"><span class="{{getSortClass 'location'}}">Standort</span></th>
+                        <th data-sort="deadline"><span class="{{getSortClass 'deadline'}}">Deadline</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each tickets}}
+                    <tr data-id="{{_id}}" class="{{ticketDue this}}">
+                        <td>{{formatDate created}}</td>
+                        <td>{{getTriage triage}}</td>
+                        <td class="description">{{{description this}}}</td>
+                        <td>{{getState this}}</td>
+                        <td>{{location}}</td>
+                        <td>{{formatDate deadline}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="visible-xs visible-sm">
+            {{#each tickets}}
+            <div data-id="{{_id}}" class="ticket col-xs-12 bg-{{ticketDue this}}">
+                <div class="row col-xs-12"><span class="small">Erstellt: {{formatDate created}}</span></div>
+                <div class="row col-xs-12"><span class="small">Triage: {{getTriage triage}}</span></div>
+                <div class="row col-xs-12"><span class="small">Beschr: {{{description this}}}</span></div>
+                <div class="row col-xs-12"><span class="small">Status: {{getState this}}</span></div>
+                <div class="row col-xs-12"><span class="small">Stao: {{location}}</span></div>
+                <div class="row col-xs-12"><span class="small">Deadline: {{formatDate deadline}}</span></div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</template>

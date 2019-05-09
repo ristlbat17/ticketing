@@ -1,0 +1,36 @@
+<template name="archive">
+    <div class="col-xs-10 col-xs-offset-1">
+        <div class="row">
+            <div class="col-sm-10 hidden-xs">
+                <h1>Ticketarchiv</h1>
+            </div>
+            <div class="col-xs-6 visible-xs">
+                <h3>Ticketarchiv</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7 col-xs-7">
+                <label for="drillLocationFilter" style="width:100%">
+                    Filtern nach Übung/Standort
+                    <select id="drillLocationFilter" class="select2 filter" multiple="multiple">
+                        <optgroup label="Übungen">
+                            {{#each drills}}
+                            <option>{{name}}</option>
+                            {{/each}}
+                        </optgroup>
+                        <optgroup label="Standorte">
+                            {{#each locations}}
+                            <option>{{name}}</option>
+                            {{/each}}
+                        </optgroup>
+                    </select>
+                </label>
+            </div>
+            <div class="col-xs-offset-3 col-xs-2 col-sm-offset-3 col-sm-2 download">
+                <a href="#" id="download" class="btn btn-lg btn-default" style="margin-bottom:20px">
+                    <span class="glyphicon glyphicon-cloud-download"></span> CSV herunterladen</a>
+            </div>
+        </div>
+        {{>ticketList}}
+    </div>
+</template>

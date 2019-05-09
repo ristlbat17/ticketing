@@ -1,0 +1,97 @@
+<template name="operations">
+    <div class="level-table col-xs-10 col-xs-offset-1">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="input-group">
+                    <input type="text" id="list-search" class="form-control" placeholder="Filtern nach Bündelname / Standort">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" id="btn-clear-search" type="button">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <select id="drillFilter" class="form-control" required title="Einsatz" placeholder="XXX">
+                    {{#each drills}}
+                    <option value="{{_id}}">Einsatz: {{name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 hidden-xs">
+                <div class="row">
+                    <div class="col-sm-6 hidden-xs">
+                        <h2>Standortübersicht</h2>
+                    </div>
+                    <div class="col-sm-6 hidden-xs">
+                        <select class="form-control filter-element" required title="Filter für Standortübersicht" id="locationShowNumberElements">
+                            <option value="3"> 3 Standorte anzeigen</option>
+                            <option value="5"> 5 Standorte anzeigen</option>
+                            <option value="10"> 10 Standorte anzeigen </option>
+                            <option value="x"> Alle Standorte anzeigen</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 visible-xs">
+                <h3>Standortübersicht</h3>
+            </div>
+            <div class="col-xs-12 visible-xs">
+                <select class="form-control filter-element" required title="Filter für Standortübersicht" id="locationShowNumberElements">
+                    <option value="3"> 3 Standorte anzeigen</option>
+                    <option value="5"> 5 Standorte anzeigen</option>
+                    <option value="10"> 10 Standorte anzeigen </option>
+                    <option value=""> Alle Standorte anzeigen</option>
+                </select>
+            </div>
+            <div class="col-xs-12  col-sm-6">
+                <a href="#" id="downloadLocationHistory" class="add-btn btn btn-default pull-right">
+                    <span class="glyphicon glyphicon-cloud-download"></span> Journal herunterladen</a>
+            </div>
+
+            {{>locationList}} {{>editLocationStatus}}
+        </div>
+        <div class="row">
+            <div class="col-sm-6 hidden-xs">
+                <div class="row">
+                    <div class="col-sm-6 hidden-xs">
+                        <h2>Bündeltabelle</h2>
+                    </div>
+                    <div class="col-sm-6 hidden-xs ">
+                        <select class="form-control filter-element" required title="Filter für Bündeltabelle" id="bundleShowNumberElements">
+                            <option value="3"> 3 Bündel anzeigen</option>
+                            <option value="5"> 5 Bündel anzeigen</option>
+                            <option value="10"> 10 Bündel anzeigen </option>
+                            <option value=""> Alle Bündel anzeigen</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xs-6 visible-xs">
+                <h3 style="vertical-align: middle">Bündeltabelle</h3>
+            </div>
+            <div class="col-xs-12 visible-xs">
+                <select class="form-control filter-element" required title="Filter für Bündeltabelle" id="bundleShowNumberElements">
+                    <option value="3"> 3 Bündel anzeigen</option>
+                    <option value="5"> 5 Bündel anzeigen</option>
+                    <option value="10"> 10 Bündel anzeigen </option>
+                    <option value=""> Alle Bündel anzeigen</option>
+                </select>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="btn-group add-btn pull-right">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#newLevel">Neuer Pegelwert</button>
+                    <a href="#" id="downloadBundleHistory" class="btn btn-default pull-right">
+                        <span class="glyphicon glyphicon-cloud-download"></span> Journal herunterladen</a>
+                </div>
+            </div>
+
+        </div>
+     {{>bundleList}}  {{>editBundleStatus}} {{>newBundleLevel}}
+    </div>
+</template>

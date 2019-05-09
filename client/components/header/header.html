@@ -1,0 +1,103 @@
+<template name="header">
+    <header class="site-header">
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="visible-xs visible-sm mobile">
+                    <div class="col-xs-12">
+                        <i class="glyphicon glyphicon-menu-hamburger"></i>
+                    </div>
+                    <div class="mobile-nav">
+                        <ul>
+                            {{#if currentUser}}
+                            <li class="{{routeState ''}}">
+                                {{#linkTo route="index" class="e-link light"}} Tickets <span class="badge">{{getPublishedCount 'ticketDueCount'}}</span>                                {{/linkTo}}
+                            </li>
+                            <li class="{{routeState 'archive'}}">
+                                {{#linkTo route="archive" class="e-link light"}} Archiv <span class="badge">{{getPublishedCount 'ticketDoneCount'}}</span>                                {{/linkTo}}
+                            </li>
+                            <li class="{{routeState 'operations'}}">
+                                {{#linkTo route="operations" class="e-link light"}} 
+                                Operations 
+                                <!-- <span class="badge text-warning">{{getPublishedCount 'ticketDoneCount'}} </span> -->
+                                {{/linkTo}}
+                            </li>
+                            <li class="{{routeState 'operationanalysis'}}">
+                                {{#linkTo route="operationanalysis" class="e-link light"}} 
+                                Auswertung
+                                {{/linkTo}}
+                            </li>
+                            {{#if currentUser.profile.admin}}
+                            <li class="{{routeState 'admin'}}">
+                                {{#linkTo route="administration" class="e-link light"}} Administration {{/linkTo}}
+                            </li>
+                            {{/if}}
+                            <li class="username {{routeState 'profile'}}">
+                                {{#linkTo route="profile" class="e-link light"}} {{currentUser.profile.name}} {{/linkTo}}
+                            </li>
+                            <li>
+                                <a href="#" class="e-link light js-logout">Logout</a>
+                            </li>
+                            {{else}}
+                            <li class="{{routeState 'login'}}">
+                                {{#linkTo route="login" class="e-link light"}} Login {{/linkTo}}
+                            </li>
+                            {{/if}}
+                        </ul>
+                        <div class="close-nav"><i class="glyphicon glyphicon-remove"></i></div>
+                    </div>
+                </nav>
+                <nav class="hidden-xs hidden-sm">
+                    <div class="col-md-1">
+                        <img src="/img/badge_small.png" />
+                    </div>
+                    <div class="col-md-6">
+                        <ul>
+                            {{#if currentUser}}
+                            <li class="{{routeState ''}}">
+                                {{#linkTo route="index" class="e-link light"}} Tickets <span class="badge">{{getPublishedCount 'ticketDueCount'}}</span>                                {{/linkTo}}
+                            </li>
+                            <li class="{{routeState 'archive'}}">
+                                {{#linkTo route="archive" class="e-link light"}} Archiv <span class="badge">{{getPublishedCount 'ticketDoneCount'}}</span>                                {{/linkTo}}
+                            </li>
+                            <li class="{{routeState 'operations'}}">
+                                {{#linkTo route="operations" class="e-link light"}} 
+                                Operations 
+                                <!-- <span class="label label-warning label-as-badge">{{getPublishedCount 'ticketDoneCount'}} </span> -->
+                                {{/linkTo}}
+                            </li>
+                            <li class="{{routeState 'operationanalysis'}}">
+                                {{#linkTo route="operationanalysis" class="e-link light"}} 
+                                Auswertung
+                                {{/linkTo}}
+                            </li>
+                            {{#if currentUser.profile.admin}}
+                            <li class="{{routeState 'admin'}}">
+                                {{#linkTo route="administration" class="e-link light"}} Admin {{/linkTo}}
+                            </li>
+                            {{/if}} {{else}}
+                            <li class="{{routeState 'login'}}">
+                                {{#linkTo route="login" class="e-link light"}} Login {{/linkTo}}
+                            </li>
+                            {{/if}}
+                        </ul>
+                    </div>
+                    <div class="col-md-5">
+                        <ul class="pull-right">
+                        {{#if currentUser}}
+                            <li class="username {{routeState 'profile'}}">
+                                {{#linkTo route="profile" class="e-link light"}} {{currentUser.profile.name}} {{/linkTo}}
+                            </li>
+                            <li>
+                                <a href="#" class="e-link light js-logout">Logout</a>
+                            </li>
+                        {{/if}}
+                            <li>
+                                <span class="small" id="time">23.08.16 07:14</span>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+</template>

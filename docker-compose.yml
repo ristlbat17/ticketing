@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  ticketing:
+    image: ristlbat17/ticketing:2019-Woche1
+    build: .
+    environment:
+      - 'MONGO_URL=mongodb://ticketingdb'
+      - 'ROOT_URL=http://ticketing.ristl17.ch'
+    restart: always
+    depends_on: 
+      - ticketingdb
+    ports:
+      - '3500:80'
+  ticketingdb:
+    image: 'mongo:latest'
+    restart: always
+    volumes:
+      - '/var/ticketing/db:/data/db'
+    ports:
+      - '28017:27017'

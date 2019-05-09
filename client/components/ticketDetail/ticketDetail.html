@@ -1,0 +1,225 @@
+<template name="ticketDetail">
+    <div class="ticket-detail col-xs-10 col-xs-offset-1">
+        {{>backButton}}
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Details
+                    <small>erfasst von: {{ticket.creator}}</small>
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Koordinaten</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Meldung von:</div>
+                <div class="col-xs-6 info-text">{{ticket.messenger}}</div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Telefon:</div>
+                <div class="col-xs-6 info-text">{{ticket.phone}}</div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Standort:</div>
+                <div class="col-xs-6 info-text">{{ticket.location}}</div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Triage:</div>
+                <div class="col-xs-6 info-text">{{getTriage ticket.triage}}</div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Übung:</div>
+                <div class="col-xs-6 info-text">{{ticket.drill}}</div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Priorität:</div>
+                <div class="col-xs-6 info-text">{{getPriority ticket.priority}}</div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Status:</div>
+                <div class="col-xs-6 info-text">{{getState ticket}}</div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Erstellt:</div>
+                <div class="col-xs-6 info-text">{{formatDate ticket.created}}</div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-6 info-row">Deadline:</div>
+                <div class="col-xs-6 info-text">{{formatDate ticket.deadline}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Beschreibung</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <p>{{ticket.description}}</p>
+            </div>
+        </div>
+        <div class="row">
+            {{>ticketOperations ticket}}
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Aktionen <span class="badge">{{ticket.actions.length}}</span></h2>
+            </div>
+        </div>
+        <div class="row">
+            {{#each ticket.actions}} {{>ticketAction}} {{/each}}
+        </div>
+    </div>
+    <div class="modal fade" id="editTicket" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">
+                        Ticket bearbeiten
+                    </h4>
+                </div>
+                <form id="editTicketForm" class="form-horizontal" novalidate>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="creator" class="control-label col-xs-4">Erfasser*</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" class="form-control" id="creator" required value="{{ticket.creator}}">
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="form-group">
+                            <label for="messenger" class="control-label col-xs-4">Meldung von*</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" class="form-control" id="messenger" required value="{{ticket.messenger}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="control-label col-xs-4">Telefon*</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" class="form-control" id="phone" required value="{{ticket.phone}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="drill" class="control-label col-xs-4">Übung*</label>
+
+                            <div class="col-xs-8">
+                                <select id="drill" class="form-control" required>
+                                    {{#each drills}}
+                                        <option data-drill-id="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="location" class="control-label col-xs-4">Standort*</label>
+
+                            <div class="col-xs-8">
+                                <select id="location" class="form-control" required>
+                                    {{#each locations}}
+                                        <option value="{{name}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="triage" class="control-label col-xs-4">Triage*</label>
+
+                            <div class="col-xs-8">
+                                <select id="triage" class="form-control" required>
+                                    <option value=""></option>
+                                    {{#each users}}
+                                        <option value="{{_id}}">{{profile.name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="priority" class="control-label col-xs-4">Priorität</label>
+
+                            <div class="col-xs-8">
+                                <select id="priority" class="form-control">
+                                    <option value="normal">Normal</option>
+                                    <option value="high">Hoch</option>
+                                    <option value="low">Tief</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="control-label col-xs-4">Beschreibung*</label>
+
+                            <div class="col-xs-8">
+                                <textarea class="form-control" rows="6" id="description" required>{{ticket.description}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                        <input type="submit" class="btn btn-primary" value="Speichern" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="ticketOperations">
+    <div class="col-xs-12 space-top">
+        <div class="row ">
+            <div class="col-xs-12">
+
+                <button class="btn btn-default" data-toggle="modal" data-target="#editTicket" id="editTicketBtn">Ticket bearbeiten
+                    </button>
+            </div>
+        </div>
+        <div class="row margin-row">
+            <div class="col-xs-12 col-sm-6">
+                <h3>Neue Aktion</h3>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <input type="text" class="form-control" id="editor" required placeholder="Bearbeiter">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <textarea class="form-control" id="newAction" rows="6"></textarea>
+            </div>
+        </div>
+        <div class="row margin-row">
+            <div class="col-xs-2 info-text">
+                Weiter an Triage:
+            </div>
+            <div class="col-xs-4">
+                <select id="newTriage" class="form-control" required>
+                    <option value=""></option>
+                    {{#each users}}
+                        <option value="{{_id}}">{{profile.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="col-xs-6  col-sm-6">
+                <div class="btn-group  pull-right">
+                    {{#if completedAt}}
+                    <button class="btn btn-warning" id="reopenTicket">Wieder öffnen</button> {{else}}
+
+                    <button class="btn btn-success" id="closeTicket">Ticket schliessen</button> {{/if}}
+
+                    <button class="btn btn-primary" id="saveNewAction">Speichern</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="ticketAction">
+    <div class="ticket-action col-xs-12">
+        <p class="action-info">{{formatDate created}} - {{editor}}</p>
+        <p>{{text}}</p>
+    </div>
+</template>
