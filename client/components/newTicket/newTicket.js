@@ -27,8 +27,8 @@ Template.newTicket.onRendered(function () {
 });
 
 Template.newTicket.helpers({
-    locations: function () {
-        return Locations.find({ drill: Template.instance().selectedDrill.get() });
+    locations: function () {  
+        return Locations.find({ drill: Template.instance().selectedDrill.get() }, { sort: { name: 1 }});
     },
     users: function () {
         return Meteor.users.find();
