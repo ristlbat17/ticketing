@@ -152,7 +152,7 @@ function updateTicketWithAction(template, completed, err) {
             created: new Date()
         }
     }
-
+    notificationArea.success("Aktion hinzugefügt.");
     Tickets.update({ _id: template.data._id }, updateQuery, err);
 
 }
@@ -166,6 +166,7 @@ function updateTicketWithTriage(template, err) {
             'triageName': Meteor.users.findOne({ _id: newTriage.val() }).profile.name
         };
     }
+    notificationArea.success("Ticket verschoben.");
     Tickets.update({ _id: template.data._id }, query, err);
 }
 
@@ -182,13 +183,17 @@ Template.ticketOperations.events({
                 console.error(err);
                 return notificationArea.error("Es ist ein Fehler beim Abschliessen aufgetreten.");
             }
-            notificationArea.success("Ticket verschoben / Aktion hinzugefügt.");
             newTriage.val('');
             editor.val('');
             actionText.val('');
         };
 
-        if (checkActionIsValid(template)) {
+        if (checkActionIsValid(template) && checkTriageIsValid(template)) {
+
+            updateTicketWithAction(template, '', errorHandler);
+            updateTicketWithTriage(template, errorHandler);
+        }
+        else if (checkActionIsValid(template)) {
 
             updateTicketWithAction(template, '', errorHandler);
         }
