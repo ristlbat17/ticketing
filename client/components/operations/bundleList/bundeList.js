@@ -249,9 +249,17 @@ Template.newBundleLevel.events({
             rxValue = parseInt(template.$('#rxValue').val());
         save = true;
 
-       if (rxValue > 22 || rxValue < -99 || txValue > 22 || txValue < -99){
+        if (!txValue || !rxValue ){
+            return notificationArea.error("Bitte RX/TX Werte eingeben", true);
+        }
+        if (!locationSelection){
+            return notificationArea.error("Bitte Standort auswählen", true);
+        }
+
+        if (rxValue > 22 || rxValue < -99 || txValue > 22 || txValue < -99){
             return notificationArea.error("RX/TX Werte müssen zwischen +22 und -99 sein.", true);
         }
+
 
         if (!selectedDate) {
             selectedDate = new Date();

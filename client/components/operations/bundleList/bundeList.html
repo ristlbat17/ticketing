@@ -163,9 +163,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    
                     <h4 class="modal-title">
                         Pegelwerte erfassen
                     </h4>
+                    {{>notificationArea modal=true}}
                 </div>
                 <form id="newLevelForm" class="form-horizontal" novalidate>
                     <div class="modal-body">
@@ -218,7 +220,7 @@
                                 <div class="input-group">
                                     
                                     <input type="number" min="-99" max="22" step="any"  class="form-control" id="txValue" required />
-                                    <span class="input-group-addon">dBm</span>  
+                                    <span class="input-group-addon">dBm</span> 
                                 </div>
                             </div>
                         </div>
